@@ -1,24 +1,39 @@
-pragma solidity ^0.4.23;
+pragma solidity 0.4.24;
 
 contract ExistenceIntegrityOwnershipProof {
-    struct ObjectDetails {
+    struct OwnershipDetails {
         uint createdAt;
-        string currentOwner;
+        address currentOwner;
     }
 
-    mapping (string => ObjectDetails) objects;
+    mapping (string => OwnershipDetails[]) objectsToOwnerships;
 
-    event logObjectAddedStatus(bool status, uint createdAt, string currentOwner, string objectHash);
+    event logOwnershipChangedStatus(bool status, uint createdAt, address currentOwner, string objectID);
 
-    function setNewOwner(string newOwner, string objectHash) private {
-        if (objects[objectHash].createdAt == 0) {
-            objects[objectHash] = ObjectDetails(block.timestamp, newOwner);
-        } else {
-            emit logObjectAddedStatus(false, block.timestamp, newOwner, objectHash);
-        }
+    function setNewOwner(address newOwner, string objectID, uint timestamp) public {
+        OwnershipDetails memory newOwnership = OwnershipDetails({
+            createdAt: timestamp,
+            currentOwner: newOwner
+        });
+        OwnershipDetails[] currentObjectsHistory = objectsToOwnerships[objectID];
+        currentObjectsHistory.push(newOwnership);
+        // OwnershipDetails[] ownershipDetailsForObject = objectsToOwnerships[objectID];
+        // uint ownershipLength = ownershipDetailsForObject.length;
+        // OwnershipDetails currentOwnership = ownershipDetailsForObject[ownershipLength - 1];
+        // uint createdAt = currentOwnership.createdAt;
+        // address currentOwner = currentOwnership.currentOwner;
+        // if (objectsToOwnerships[objectHash].createdAt == 0) {
+        //     objectsToOwnerships[objectHash] = OwnershipDetails(block.timestamp, newOwner);
+        // } else {
+        //     emit logOwnershipChangedStatus(false, block.timestamp, newOwner, objectHash);
+        // }
     }
 
-    function getOwner(string objectHash) public returns (uint createdAt, string currentOwner) {
-        return (objects[objectHash].createdAt, objects[objectHash].currentOwner);
+    function getCurrentOwnershipDetails(string objectID) public view returns (address currentOwner) {
+        OwnershipDetails[] currentObjectsHistory = objectsToOwnerships[objectID];
+        uint objectsHistoryLength = currentObjectsHistory.length;
+        OwnershipDetails lastOwnership = currentObjectsHistory[objectsHistoryLength - 1];
+        return lastOwnership.currentOwner;
+        // return (objectsToOwnerships[objectHash].createdAt, objectsToOwnerships[objectHash].currentOwner);
     }
 }
