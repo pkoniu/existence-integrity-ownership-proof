@@ -12,7 +12,7 @@ contract('ExistenceIntegrityOwnershipProof', async (accounts) => {
 
     it('should save new ownership details only for correct chain of changes', async () => {
         const instance = await ExistenceIntegrityOwnershipProof.deployed();
-        await instance.setNewOwner(accounts[1], accounts[2], '124', Date.now()); //currentOwner = accounts[1]
+        await instance.setNewOwner(accounts[1], accounts[2], '124', Date.now());
         await instance.setNewOwner(accounts[2], accounts[1], '124', Date.now());
 
         const ownerOf124 = await instance.getCurrentOwnershipDetails('124');
@@ -22,7 +22,7 @@ contract('ExistenceIntegrityOwnershipProof', async (accounts) => {
 
     it('should not save new ownership details if prev owner incorrect', async () => {
         const instance = await ExistenceIntegrityOwnershipProof.deployed();
-        await instance.setNewOwner(accounts[1], accounts[2], '125', Date.now()); //currentOwner = accounts[1]
+        await instance.setNewOwner(accounts[1], accounts[2], '125', Date.now());
         await instance.setNewOwner(accounts[2], accounts[3], '125', Date.now());
 
         const ownerOf125 = await instance.getCurrentOwnershipDetails('125');
