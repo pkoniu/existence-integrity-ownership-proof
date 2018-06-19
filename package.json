@@ -1,0 +1,25 @@
+{
+  "name": "existence-integrity-ownership-proof",
+  "version": "1.0.0",
+  "description": "- truffle: `npm i -g truffle` - clone repository - TODO",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pkoniu/existence-integrity-ownership-proof.git"
+  },
+  "author": "Patryk Konior",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pkoniu/existence-integrity-ownership-proof/issues"
+  },
+  "homepage": "https://github.com/pkoniu/existence-integrity-ownership-proof#readme",
+  "dependencies": {
+    "truffle-hdwallet-provider": "0.0.5"
+  }
+}
