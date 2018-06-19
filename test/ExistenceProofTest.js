@@ -2,7 +2,7 @@ const ExistenceIntegrityOwnershipProof = artifacts.require('ExistenceIntegrityOw
 
 contract('ExistenceIntegrityOwnershipProof', async (accounts) => {
     it('should save new ownership details', async () => {
-        const instance = ExistenceIntegrityOwnershipProof.deployed();
+        const instance = await ExistenceIntegrityOwnershipProof.deployed();
         await instance.setNewOwner(accounts[1], '123', Date.now());
 
         const ownerOf123 = await instance.getCurrentOwnershipDetails('123');
