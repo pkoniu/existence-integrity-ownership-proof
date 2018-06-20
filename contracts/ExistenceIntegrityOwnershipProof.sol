@@ -19,11 +19,11 @@ contract ExistenceIntegrityOwnershipProof {
         }
         
         if (historyLength == 0 || currentOwnership.currentOwner == prevOwner) {
-            OwnershipDetails memory newOwnership2 = OwnershipDetails({
+            OwnershipDetails memory newOwnership = OwnershipDetails({
                 createdAt: timestamp,
                 currentOwner: newOwner
             });
-            currentObjectsHistory.push(newOwnership2);
+            currentObjectsHistory.push(newOwnership);
             emit logOwnershipChangedStatus(true, timestamp, newOwner, objectID);
         } else {
             emit logOwnershipChangedStatus(false, timestamp, newOwner, objectID);
