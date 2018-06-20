@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/pkoniu/existence-integrity-ownership-proof#readme",
   "dependencies": {
-    "truffle-hdwallet-provider": "0.0.5"
+    "truffle-hdwallet-provider": "0.0.5",
+    "truffle": "4.1.11"
   }
 }
