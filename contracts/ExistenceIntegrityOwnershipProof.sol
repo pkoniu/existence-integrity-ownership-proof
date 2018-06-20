@@ -1,32 +1,49 @@
 pragma solidity 0.4.24;
 
 contract ExistenceIntegrityOwnershipProof {
+    struct OwnershipSignature {
+        uint v;
+        bytes32 r;
+        bytes32 s;
+    }
+
     struct OwnershipDetails {
-        uint createdAt;
         address currentOwner;
+        OwnershipSignature ownerSignature;
     }
 
     mapping (string => OwnershipDetails[]) objectsToOwnerships;
 
-    event logOwnershipChangedStatus(bool status, uint createdAt, address currentOwner, string objectID);
+    event logOwnershipChangedStatus(bool status, address currentOwner, string objectID);
 
-    function setNewOwner(address newOwner, address prevOwner, string objectID, uint timestamp) public {
+    function setNewOwner(address newOwner, address prevOwner, string objectID, uint oldV, bytes32 oldR, bytes32 oldS, uint newV, bytes32 newR, bytes32 newS) public {
+        // OwnershipSignature memory oldSignature = OwnershipSignature({
+        //     v: oldV,
+        //     r: oldR,
+        //     s: oldS
+        // });
+
+        OwnershipSignature memory newSignature = OwnershipSignature({
+            v: newV,
+            r: newR,
+            s: newS
+        });
+
         OwnershipDetails[] currentObjectsHistory = objectsToOwnerships[objectID];
-        uint historyLength = currentObjectsHistory.length;
 
-        if (historyLength > 0) {
-            OwnershipDetails currentOwnership = currentObjectsHistory[historyLength - 1];
+        if (currentObjectsHistory.length > 0) {
+            OwnershipDetails currentOwnership = currentObjectsHistory[currentObjectsHistory.length - 1];
         }
         
-        if (historyLength == 0 || currentOwnership.currentOwner == prevOwner) {
+        if (currentObjectsHistory.length == 0 || currentOwnership.currentOwner == prevOwner) {
             OwnershipDetails memory newOwnership = OwnershipDetails({
-                createdAt: timestamp,
-                currentOwner: newOwner
+                currentOwner: newOwner,
+                ownerSignature: newSignature
             });
             currentObjectsHistory.push(newOwnership);
-            emit logOwnershipChangedStatus(true, timestamp, newOwner, objectID);
+            emit logOwnershipChangedStatus(true, newOwner, objectID);
         } else {
-            emit logOwnershipChangedStatus(false, timestamp, newOwner, objectID);
+            emit logOwnershipChangedStatus(false, newOwner, objectID);
         }
     }
 
